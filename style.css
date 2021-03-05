@@ -1,0 +1,13 @@
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+html,
+body {
+  height: 100%;
+  font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+#map {
+  height: 100%;
+}
