@@ -11,3 +11,13 @@ body {
 #map {
   height: 100%;
 }
+.mycluster {
+  line-height: 50px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: #0d6efd;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}
