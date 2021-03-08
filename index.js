@@ -3,10 +3,12 @@ $(document).ready(function () {
   $(document).ajaxStart(function () {
     loading.show();
   });
-
   $(document).ajaxStop(function () {
     loading.hide();
   });
+
+  $("#map").css({ height: `calc(100% - ${$("#main-nav").css("height")})` });
+
   var mymap = L.map("map", { zoomControl: false }).setView([51.505, -0.09], 3);
   var zoomControl = L.control.zoom({
     position: "bottomright",
@@ -60,7 +62,73 @@ $(document).ready(function () {
         .addTo(mymap);
     },
   });
-  getEqs("all", "month", mymap, markers);
+  getEqs(
+    $("#source-dropdown").data("hazturk"),
+    $("#magnitude-dropdown").data("hazturk"),
+    $("#time-dropdown").data("hazturk"),
+    mymap,
+    markers
+  );
+  $("#magnitude-dropdown")
+    .find("li a")
+    .click(function () {
+      $("#mag-a").html(
+        $("#mag-a")
+          .html()
+          .replace(
+            magnitudeDisplayNames[$("#magnitude-dropdown").data("hazturk")],
+            magnitudeDisplayNames[this.dataset.hazturk]
+          )
+      );
+      $("#magnitude-dropdown").data("hazturk", this.dataset.hazturk);
+      getEqs(
+        $("#source-dropdown").data("hazturk"),
+        this.dataset.hazturk,
+        $("#time-dropdown").data("hazturk"),
+        mymap,
+        markers
+      );
+    });
+  $("#time-dropdown")
+    .find("li a")
+    .click(function () {
+      $("#time-a").html(
+        $("#time-a")
+          .html()
+          .replace(
+            timeDisplayNames[$("#time-dropdown").data("hazturk")],
+            timeDisplayNames[this.dataset.hazturk]
+          )
+      );
+      $("#time-dropdown").data("hazturk", this.dataset.hazturk);
+      getEqs(
+        $("#source-dropdown").data("hazturk"),
+        $("#magnitude-dropdown").data("hazturk"),
+        this.dataset.hazturk,
+        mymap,
+        markers
+      );
+    });
+  $("#source-dropdown")
+    .find("li a")
+    .click(function () {
+      $("#source-a").html(
+        $("#source-a")
+          .html()
+          .replace(
+            sourceDisplayNames[$("#source-dropdown").data("hazturk")],
+            sourceDisplayNames[this.dataset.hazturk]
+          )
+      );
+      $("#source-dropdown").data("hazturk", this.dataset.hazturk);
+      getEqs(
+        this.dataset.hazturk,
+        $("#magnitude-dropdown").data("hazturk"),
+        $("#time-dropdown").data("hazturk"),
+        mymap,
+        markers
+      );
+    });
 });
 
 function updateContainer(control, map) {
@@ -72,9 +140,9 @@ function updateContainer(control, map) {
   }
 }
 
-function getEqs(mag, time, map, markers) {
+function getEqs(source, mag, time, map, markers) {
   $.ajax({
-    url: `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/${mag}_${time}.geojson`,
+    url: `${urls[source]}${mag}_${time}.geojson`,
     success: function (data) {
       markers.clearLayers();
       if (data && data.features.length > 0) {
