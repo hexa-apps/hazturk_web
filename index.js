@@ -31,6 +31,16 @@ $(document).ready(function () {
       });
     },
   });
+  markers.on('clustermouseover', function(c) {
+    var popup = L.popup()
+        .setLatLng(c.layer.getLatLng())
+        .setContent(c.layer._childCount +' Locations(click to Zoom)')
+        .openOn(mymap);
+    }).on('clustermouseout',function(c){
+      mymap.closePopup();
+    }).on('clusterclick',function(c){
+      mymap.closePopup();
+    });
   // $.ajax({
   //   url: `./assets/active_faults.geojson`,
   //   success: function (data) {
@@ -147,6 +157,7 @@ function getEqs(source, mag, time, map, markers) {
       markers.clearLayers();
       if (data && data.features.length > 0) {
         var geojsonLayer = L.geoJSON(data, {
+          onEachFeature: onEachFeature,
           pointToLayer: function (feature, latlng) {
             var color =
               feature.properties.mag < 1
@@ -167,12 +178,17 @@ function getEqs(source, mag, time, map, markers) {
               fillOpacity: 1,
             });
           },
-        }).bindPopup(function (layer) {
-          return layer.feature.properties.mag.toString();
-        });
+        })
         markers.addLayer(geojsonLayer);
         map.addLayer(markers);
       }
     },
   });
+}
+
+function onEachFeature(feature, layer) {
+  // does this feature have a property named popupContent?
+  if (feature.properties && feature.properties.mag) {
+      layer.bindPopup(feature.properties.mag.toString());
+  }
 }
