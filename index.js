@@ -31,37 +31,37 @@ $(document).ready(function () {
       });
     },
   });
-  $.ajax({
-    url: `./assets/active_faults.geojson`,
-    success: function (data) {
-      var vectorGrid = L.vectorGrid
-        .slicer(data, {
-          rendererFactory: L.svg.tile,
-          vectorTileLayerStyles: {
-            sliced: function(properties, zoom) {
-              // var p = properties.mapcolor7 % 5;
-              return {
-                // fillColor: p === 0 ? '#800026' :
-                //     p === 1 ? '#E31A1C' :
-                //     p === 2 ? '#FEB24C' :
-                //     p === 3 ? '#B2FE4C' : '#FFEDA0',
-                //  fillOpacity: 1,
-                stroke: true,
-                // fill: true,
-                color: 'red',
-                //  opacity: 0.2,
-                weight: 1,
-              }
-            }
-          },
-          interactive: true,
-          getFeatureId: function (f) {
-            return f.properties.catalog_id;
-          },
-        })
-        .addTo(mymap);
-    },
-  });
+  // $.ajax({
+  //   url: `./assets/active_faults.geojson`,
+  //   success: function (data) {
+  //     var vectorGrid = L.vectorGrid
+  //       .slicer(data, {
+  //         rendererFactory: L.svg.tile,
+  //         vectorTileLayerStyles: {
+  //           sliced: function(properties, zoom) {
+  //             // var p = properties.mapcolor7 % 5;
+  //             return {
+  //               // fillColor: p === 0 ? '#800026' :
+  //               //     p === 1 ? '#E31A1C' :
+  //               //     p === 2 ? '#FEB24C' :
+  //               //     p === 3 ? '#B2FE4C' : '#FFEDA0',
+  //               //  fillOpacity: 1,
+  //               stroke: true,
+  //               // fill: true,
+  //               color: 'red',
+  //               //  opacity: 0.2,
+  //               weight: 1,
+  //             }
+  //           }
+  //         },
+  //         interactive: true,
+  //         getFeatureId: function (f) {
+  //           return f.properties.catalog_id;
+  //         },
+  //       })
+  //       .addTo(mymap);
+  //   },
+  // });
   getEqs(
     $("#source-dropdown").data("hazturk"),
     $("#magnitude-dropdown").data("hazturk"),
